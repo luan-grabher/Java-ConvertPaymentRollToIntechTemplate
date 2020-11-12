@@ -37,7 +37,7 @@ public class Entry_Model {
         addDefaultCol("Cod Perfil");
         addDefaultCol("Cod Fundo");
         addDefaultCol("Cod Custeio");
-        addDefaultCol("Cod Custo");
+        addDefaultCol("Cod Ccusto");
     }
 
     /**
@@ -81,7 +81,7 @@ public class Entry_Model {
         }
     }
 
-    public void addFGTSToEntries() {
+    public void addFGTSToEntry() {
         Map<String, String> cols = new HashMap<>();
         cols.put("Descricao", "FGTS");
         cols.put("Data Emissao", dataEmissao);
@@ -95,8 +95,8 @@ public class Entry_Model {
 
         entries.add(cols);
     }
-    
-    public void addINSSToEntries() {
+
+    public void addINSSToEntry() {
         Map<String, String> cols = new HashMap<>();
         cols.put("Descricao", "INSS");
         cols.put("Data Emissao", dataEmissao);
@@ -109,5 +109,48 @@ public class Entry_Model {
         cols.put("Tipo Conta Bancaria", "COR");
 
         entries.add(cols);
+    }
+
+    /**
+     * Cria uma string com o mapa de lançamentos no formato do template de
+     * provisão CSV
+     *
+     * @return Retorna uma string com o mapa de lançamentos no formato do
+     * template de provisão CSV
+     */
+    public String getImportText() {
+        StringBuilder text = new StringBuilder();
+        
+        //Percorre lançamentos
+        for (Map<String, String> entry : entries) {           
+            text.append(defaultCols.get("Cod Fundacao")).append(";");
+            text.append(defaultCols.get("Tipo da Previsao")).append(";");
+            text.append(entry.get("Descricao")).append(";");
+            text.append(defaultCols.get("Obs Geral")).append(";");
+            text.append(defaultCols.get("Cod Ccusto Emissor")).append(";");
+            text.append(entry.get("Data Emissao")).append(";");
+            text.append(entry.get("Data Vencimento")).append(";");
+            text.append(entry.get("Data Competencia Contabil")).append(";");
+            text.append(entry.get("CPFCNPJ")).append(";");
+            text.append(defaultCols.get("Cod Banco")).append(";");
+            text.append(defaultCols.get("Cod Agencia")).append(";");
+            text.append(defaultCols.get("DV Agencia")).append(";");
+            text.append(defaultCols.get("Conta Corrente")).append(";");
+            text.append(defaultCols.get("DV Conta Corrente")).append(";");
+            text.append(entry.get("Hist Contabil")).append(";");
+            text.append(defaultCols.get("Cod Natureza")).append(";");
+            text.append(defaultCols.get("Cod Empresa")).append(";");
+            text.append(defaultCols.get("Cod Plano")).append(";");
+            text.append(defaultCols.get("Cod Perfil")).append(";");
+            text.append(defaultCols.get("Cod Fundo")).append(";");
+            text.append(defaultCols.get("Cod Custeio")).append(";");
+            text.append(defaultCols.get("Cod Custo")).append(";");
+            text.append(entry.get("Valor Bruto")).append(";");
+            text.append(entry.get("Nosso Numero")).append(";");
+            text.append(entry.get("Tipo Conta Bancaria")).append(";");
+            text.append("\r\n");
+        }
+        
+        return text.toString();
     }
 }
