@@ -24,6 +24,10 @@ public class ConvertPaymentRollToIntechTemplate {
         }
 
         try {
+            //Conecta com banco de dados
+            
+            
+            
             //Pega folha de pagamento
             File payrollFile = Selector.selectFile("", "CSV(Texto separado por virgulas)", ".csv");
             //Se o arquivo for valido
