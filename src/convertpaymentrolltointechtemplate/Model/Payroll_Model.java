@@ -1,10 +1,13 @@
 package convertpaymentrolltointechtemplate.Model;
 
+import fileManager.FileManager;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Payroll_Model {
 
@@ -28,7 +31,24 @@ public class Payroll_Model {
      * os salarios    
      */
     public void extractDataOfFile() {
+        //Pega linhas arquivo
+        String text = FileManager.getText(file);
+        String[] lines = text.split("\r\n");
+        
+        //Extrai data
+        Pattern p = Pattern.compile("[A-Z]+\\/[0-9]+");
+        String firstCol = lines[0].split(";")[0];
+        Matcher m = p.matcher(firstCol);
+        if(m.find()){
+            String dateString = m.group();
 
+            //Percorre linhas
+            for (String line : lines) {
+
+            }
+        }else{
+            throw new Error("Data não encontrada na primeira linha do arquivo!");
+        }
     }
 
     public Map<String, String> getValues() {
