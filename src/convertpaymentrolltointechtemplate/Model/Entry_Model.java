@@ -26,6 +26,7 @@ public class Entry_Model {
 
         //Descrição de mes e ano
         this.payrollValues.put("Mês e Ano", Dates.getMonthAbbr_PtBr(Integer.valueOf(payrollValues.get("Mês")) - 1).toUpperCase() + " " + payrollValues.get("Ano"));
+        createDates();
 
         //Adiciona os valores das colunas padrões
         addDefaultCol("Cod Fundacao");
@@ -72,7 +73,7 @@ public class Entry_Model {
     /**
      * Cria Datas
      */
-    public void createDates() {
+    private void createDates() {
         Integer month = Integer.valueOf(payrollValues.get("Mês"));
         Integer year = Integer.valueOf(payrollValues.get("Ano"));
 
