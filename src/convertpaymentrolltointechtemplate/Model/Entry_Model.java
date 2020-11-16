@@ -25,7 +25,7 @@ public class Entry_Model {
         this.salaries = salaries;
 
         //Descrição de mes e ano
-        this.payrollValues.put("Mês e Ano", Dates.getMonthAbbr_PtBr(Integer.valueOf(payrollValues.get("Mês"))).toUpperCase() + " " + payrollValues.get("Ano"));
+        this.payrollValues.put("Mês e Ano", Dates.getMonthAbbr_PtBr(Integer.valueOf(payrollValues.get("Mês")) - 1).toUpperCase() + " " + payrollValues.get("Ano"));
 
         //Adiciona os valores das colunas padrões
         addDefaultCol("Cod Fundacao");
@@ -134,7 +134,7 @@ public class Entry_Model {
         cols.put("Data Vencimento", dia20ProximoMes);
         cols.put("Data Competencia Contabil", ultimoDiaMes);
         //cols.put("CPFCNPJ", payrollValues.get("CNPJ"));
-        cols.put("Hist Contabil", "PG FGTS FOLHA SALARIAL" + payrollValues.get("Mês e Ano"));
+        cols.put("Hist Contabil", "PG FGTS FOLHA SALARIAL " + payrollValues.get("Mês e Ano"));
         cols.put("Cod Natureza", "FF03");
         cols.put("Valor Bruto", payrollValues.get("FGTS"));
         cols.put("Nosso Numero", "");
@@ -154,7 +154,7 @@ public class Entry_Model {
         cols.put("Data Vencimento", dia20ProximoMes);
         cols.put("Data Competencia Contabil", ultimoDiaMes);
         //cols.put("CPFCNPJ", payrollValues.get("CNPJ"));
-        cols.put("Hist Contabil", "PG GPS INSS FOLHA SALARIAL" + payrollValues.get("Mês e Ano"));
+        cols.put("Hist Contabil", "PG GPS INSS FOLHA SALARIAL " + payrollValues.get("Mês e Ano"));
         cols.put("Cod Natureza", "FF02");
         cols.put("Valor Bruto", payrollValues.get("INSS"));
         cols.put("Nosso Numero", "");

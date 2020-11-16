@@ -53,7 +53,8 @@ public class Payroll_Model {
             String monthName = dateString[0];
             
             //Pega os meses em lista e pega o index onde está aquele mes pra descobrir o mes
-            month = Args.indexOf(Dates.getBrazilianMonths().toArray(String[]::new), Args.INDEX_OF_SEARCH_TYPE_EQUALS, monthName) + 1;
+            List<String> months = Dates.getBrazilianMonths();
+            month =  months.indexOf(monthName) + 1;
             values.put("Mês", month.toString());
             values.put("Ano", year.toString());
             
