@@ -8,6 +8,7 @@ import fileManager.Selector;
 import java.io.File;
 import javax.swing.JOptionPane;
 import org.ini4j.Ini;
+import sql.Database;
 
 public class ConvertPaymentRollToIntechTemplate {
 
@@ -25,42 +26,47 @@ public class ConvertPaymentRollToIntechTemplate {
 
         try {
             //Conecta com banco de dados
+            String databaseConfigPath = ini.get("Database", "configPath");
+            Database.setStaticObject(new Database(databaseConfigPath));
             
-            
-            
-            //Pega folha de pagamento
-            File payrollFile = Selector.selectFile("", "CSV(Texto separado por virgulas)", ".csv");
-            //Se o arquivo for valido
-            if (Selector.verifyFile(payrollFile.getPath(), ".csv")) {
+            //Testa conexao database
+            if(Database.getDatabase().testConnection()){                                    
+                //Pega folha de pagamento
+                File payrollFile = Selector.selectFile("", "CSV(Texto separado por virgulas)", ".csv");
+                //Se o arquivo for valido
+                if (Selector.verifyFile(payrollFile.getPath(), ".csv")) {
 
-                //Instancia o modelo folha
-                Payroll_Model payrollModel = new Payroll_Model(payrollFile);
-                //Extrai os dados do arquivo
-                payrollModel.extractDataOfFile();
+                    //Instancia o modelo folha
+                    Payroll_Model payrollModel = new Payroll_Model(payrollFile);
+                    //Extrai os dados do arquivo
+                    payrollModel.extractDataOfFile();
 
-                //Instancia modelo lançamentos
-                Entry_Model entryModel = new Entry_Model(payrollModel.getValues(), payrollModel.getSalaries());
-                entryModel.addSalariesToEntries();
-                entryModel.addFGTSToEntry();
-                entryModel.addINSSToEntry();
+                    //Instancia modelo lançamentos
+                    Entry_Model entryModel = new Entry_Model(payrollModel.getValues(), payrollModel.getSalaries());
+                    entryModel.addSalariesToEntries();
+                    entryModel.addFGTSToEntry();
+                    entryModel.addINSSToEntry();
 
-                //Cria o texto de importação
-                String importText = entryModel.getImportText();
+                    //Cria o texto de importação
+                    String importText = entryModel.getImportText();
 
-                //Salva csv na área de trabalho da pessoa
-                FileManager.save(
-                        System.getProperty("user.home")
-                        + "/Desktop/Intech "
-                        + payrollModel.getValues().get("Ano")
-                        + payrollModel.getValues().get("Mes")
-                        + ".csv",
-                        importText
-                );
+                    //Salva csv na área de trabalho da pessoa
+                    FileManager.save(
+                            System.getProperty("user.home")
+                            + "/Desktop/Intech "
+                            + payrollModel.getValues().get("Ano")
+                            + payrollModel.getValues().get("Mes")
+                            + ".csv",
+                            importText
+                    );
 
-                //Exibe informação de onde foi salvo
-                JOptionPane.showMessageDialog(null, "Arquivo salvo na sua área de trabalho!", "Programa terminado!", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(null, "Arquivo de folha de pagamento inválido!", "Arquivo Inválido", JOptionPane.ERROR_MESSAGE);
+                    //Exibe informação de onde foi salvo
+                    JOptionPane.showMessageDialog(null, "Arquivo salvo na sua área de trabalho!", "Programa terminado!", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Arquivo de folha de pagamento inválido!", "Arquivo Inválido", JOptionPane.ERROR_MESSAGE);
+                }
+            }else{
+                throw new Error("Erro ao conectar ao banco de dados!");
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro: " + e.getMessage(), "Ocorreu um erro", JOptionPane.ERROR_MESSAGE);

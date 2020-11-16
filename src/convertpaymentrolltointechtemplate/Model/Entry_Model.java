@@ -68,10 +68,11 @@ public class Entry_Model {
         for (Map<String, String> salary : salaries) {
             Map<String, String> cols = new HashMap<>();
             cols.put("Descricao", "Salário pago ao colaborador " + salary.get("Nome"));
+            cols.put("Obs Geral", "Salário");
             cols.put("Data Emissao", dataEmissao);
             cols.put("Data Vencimento", dataVencimento);
             cols.put("Data Competencia Contabil", dataCompetenciaContabil);
-            cols.put("CPFCNPJ", salary.get("CPF"));
+            //cols.put("CPFCNPJ", salary.get("CPF"));
             cols.put("Hist Contabil", "Salário pago ao colaborador " + salary.get("Nome"));
             cols.put("Valor Bruto", salary.get("Salario"));
             cols.put("Nosso Numero", salary.get("Salario"));
@@ -84,10 +85,11 @@ public class Entry_Model {
     public void addFGTSToEntry() {
         Map<String, String> cols = new HashMap<>();
         cols.put("Descricao", "FGTS");
+        cols.put("Obs Geral", "FGTS");
         cols.put("Data Emissao", dataEmissao);
         cols.put("Data Vencimento", dataVencimento);//Trocar para data do proximo mês e pá
         cols.put("Data Competencia Contabil", dataCompetenciaContabil);
-        cols.put("CPFCNPJ", payrollValues.get("CNPJ"));
+        //cols.put("CPFCNPJ", payrollValues.get("CNPJ"));
         cols.put("Hist Contabil", "Pagamento FGTS mensal");
         cols.put("Valor Bruto", payrollValues.get("FGTS"));
         cols.put("Nosso Numero", payrollValues.get("FGTS"));
@@ -99,10 +101,11 @@ public class Entry_Model {
     public void addINSSToEntry() {
         Map<String, String> cols = new HashMap<>();
         cols.put("Descricao", "INSS");
+        cols.put("Obs Geral", "INSS");
         cols.put("Data Emissao", dataEmissao);
         cols.put("Data Vencimento", dataVencimento);//Trocar para data do proximo mês e pá
         cols.put("Data Competencia Contabil", dataCompetenciaContabil);
-        cols.put("CPFCNPJ", payrollValues.get("CNPJ"));
+        //cols.put("CPFCNPJ", payrollValues.get("CNPJ"));
         cols.put("Hist Contabil", "Pagamento FGTS mensal");
         cols.put("Valor Bruto", payrollValues.get("INSS"));
         cols.put("Nosso Numero", payrollValues.get("INSS"));
@@ -126,12 +129,12 @@ public class Entry_Model {
             text.append(defaultCols.get("Cod Fundacao")).append(";");
             text.append(defaultCols.get("Tipo da Previsao")).append(";");
             text.append(entry.get("Descricao")).append(";");
-            text.append(defaultCols.get("Obs Geral")).append(";");
+            text.append(entry.get("Obs Geral")).append(";");
             text.append(defaultCols.get("Cod Ccusto Emissor")).append(";");
             text.append(entry.get("Data Emissao")).append(";");
             text.append(entry.get("Data Vencimento")).append(";");
             text.append(entry.get("Data Competencia Contabil")).append(";");
-            text.append(entry.get("CPFCNPJ")).append(";");
+            text.append(defaultCols.get("CPFCNPJ")).append(";");
             text.append(defaultCols.get("Cod Banco")).append(";");
             text.append(defaultCols.get("Cod Agencia")).append(";");
             text.append(defaultCols.get("DV Agencia")).append(";");

@@ -71,7 +71,7 @@ public class Payroll_Model {
                 }else if(line.contains("Líquido - >")){
                     //Se tiver 'Liquido', tem o salario
                     lastSalary.put("Salario", cols.get(1));   
-                    lastSalary.put("CPF", getEmployeeCPF(lastSalary.get("Codigo")));   
+                    //lastSalary.put("CPF", getEmployeeCPF(lastSalary.get("Codigo")));   
                     //coloca na lista de salarios
                     salaries.add(new HashMap<>(lastSalary));
                     //Limpa o salario atual
