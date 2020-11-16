@@ -32,7 +32,7 @@ public class ConvertPaymentRollToIntechTemplate {
             //Testa conexao database
             if(/*Database.getDatabase().testConnection()*/ true){                                    
                 //Pega folha de pagamento
-                File payrollFile = Selector.selectFile("", "CSV(Texto separado por virgulas)", ".csv");
+                File payrollFile = Selector.selectFile("", "CSV(Texto separado por virgulas)", "csv");
                 //Se o arquivo for valido
                 if (Selector.verifyFile(payrollFile.getPath(), ".csv")) {
 
@@ -69,6 +69,7 @@ public class ConvertPaymentRollToIntechTemplate {
                 throw new Error("Erro ao conectar ao banco de dados!");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Ocorreu um erro: " + e.getMessage(), "Ocorreu um erro", JOptionPane.ERROR_MESSAGE);
         } catch (Error e) {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro: " + e.getMessage(), "Ocorreu um erro", JOptionPane.ERROR_MESSAGE);

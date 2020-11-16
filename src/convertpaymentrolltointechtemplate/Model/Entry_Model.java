@@ -103,20 +103,23 @@ public class Entry_Model {
     public void addSalariesToEntries() {
         //Percorre todos salarios
         for (Map<String, String> salary : salaries) {
-            Map<String, String> cols = new HashMap<>();
-            cols.put("Descricao", "FOLHA SALARIAL");
-            cols.put("Obs Geral", salary.get("Nome").toUpperCase());
-            cols.put("Data Emissao", penultimoDiaMes);
-            cols.put("Data Vencimento", penultimoDiaProximoMes);
-            cols.put("Data Competencia Contabil", ultimoDiaMes);
-            //cols.put("CPFCNPJ", salary.get("CPF"));
-            cols.put("Hist Contabil", "PG SALARIO " + payrollValues.get("Mês e Ano"));
-            cols.put("Cod Natureza", "FF01");
-            cols.put("Valor Bruto", salary.get("Salario"));
-            cols.put("Nosso Numero", "");
-            cols.put("Tipo Conta Bancaria", "COR");
+            try{
+                Map<String, String> cols = new HashMap<>();
+                cols.put("Descricao", "FOLHA SALARIAL");
+                cols.put("Obs Geral", salary.get("Nome").toUpperCase());
+                cols.put("Data Emissao", penultimoDiaMes);
+                cols.put("Data Vencimento", penultimoDiaProximoMes);
+                cols.put("Data Competencia Contabil", ultimoDiaMes);
+                //cols.put("CPFCNPJ", salary.get("CPF"));
+                cols.put("Hist Contabil", "PG SALARIO " + payrollValues.get("Mês e Ano"));
+                cols.put("Cod Natureza", "FF01");
+                cols.put("Valor Bruto", salary.get("Salario"));
+                cols.put("Nosso Numero", "");
+                cols.put("Tipo Conta Bancaria", "COR");
 
-            entries.add(cols);
+                entries.add(cols);
+            }catch(Exception e){                
+            }
         }
     }
 

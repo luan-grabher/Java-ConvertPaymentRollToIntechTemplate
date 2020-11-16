@@ -53,7 +53,7 @@ public class Payroll_Model {
             String monthName = dateString[0];
             
             //Pega os meses em lista e pega o index onde está aquele mes pra descobrir o mes
-            month = Args.indexOf((String[]) Dates.getBrazilianMonths().toArray(), Args.INDEX_OF_SEARCH_TYPE_EQUALS, monthName) + 1;
+            month = Args.indexOf(Dates.getBrazilianMonths().toArray(String[]::new), Args.INDEX_OF_SEARCH_TYPE_EQUALS, monthName) + 1;
             values.put("Mês", month.toString());
             values.put("Ano", year.toString());
             
@@ -65,27 +65,29 @@ public class Payroll_Model {
                 List<String> cols = new ArrayList<>(Arrays.asList(line.split(";")));
                 //Remove colunas em branco
                 cols.removeAll(Arrays.asList(""));
-
-                //Se tiver escrito "Admissao em", grava o nome e codigo
-                if(line.contains("Admissão em")){
-                    lastSalary.put("Codigo", cols.get(0));
-                    lastSalary.put("Nome", cols.get(1));
-                }else if(line.contains("Líquido - >")){
-                    //Se tiver 'Liquido', tem o salario
-                    lastSalary.put("Salario", cols.get(1));   
-                    //lastSalary.put("CPF", getEmployeeCPF(lastSalary.get("Codigo")));   
-                    //coloca na lista de salarios
-                    salaries.add(new HashMap<>(lastSalary));
-                    //Limpa o salario atual
-                    lastSalary.clear();
-                }else if(cols.get(0).contains("FGTS GRF 8%")){
-                    values.put("FGTS", cols.get(1).replaceAll("[^0-9,]", ""));
-                }else if(cols.get(0).contains("GPS - >")){
-                    values.put("INSS", cols.get(1).replaceAll("[^0-9,]", ""));
-                }else if(line.contains("Empresa: ")){
-                    //Pega número da empresa e CNPJ
-                    values.put("empresa", cols.get(0).split(":")[1].split("-")[0].trim());
-                    values.put("CNPJ", cols.get(1).split(":")[1].trim());
+                
+                if(cols.size()>=2){
+                    //Se tiver escrito "Admissao em", grava o nome e codigo
+                    if(line.contains("Admissão em")){
+                        lastSalary.put("Codigo", cols.get(0));
+                        lastSalary.put("Nome", cols.get(1));
+                    }else if(line.contains("Líquido - >")){
+                        //Se tiver 'Liquido', tem o salario
+                        lastSalary.put("Salario", cols.get(1));   
+                        //lastSalary.put("CPF", getEmployeeCPF(lastSalary.get("Codigo")));   
+                        //coloca na lista de salarios
+                        salaries.add(new HashMap<>(lastSalary));
+                        //Limpa o salario atual
+                        lastSalary.clear();
+                    }else if(cols.get(0).contains("FGTS GRF 8%")){
+                        values.put("FGTS", cols.get(1).replaceAll("[^0-9,]", ""));
+                    }else if(cols.get(0).contains("GPS - >")){
+                        values.put("INSS", cols.get(1).replaceAll("[^0-9,]", ""));
+                    }else if(line.contains("Empresa: ")){
+                        //Pega número da empresa e CNPJ
+                        values.put("empresa", cols.get(0).split(":")[1].split("-")[0].trim());
+                        values.put("CNPJ", cols.get(1).split(":")[1].trim());
+                    }
                 }
             }
         }else{
