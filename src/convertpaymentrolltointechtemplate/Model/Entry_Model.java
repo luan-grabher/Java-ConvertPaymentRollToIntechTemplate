@@ -1,7 +1,9 @@
 package convertpaymentrolltointechtemplate.Model;
 
+import Dates.Dates;
 import convertpaymentrolltointechtemplate.ConvertPaymentRollToIntechTemplate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,13 +15,17 @@ public class Entry_Model {
     private final List<Map<String, String>> salaries;
     private Map<String, String> defaultCols = new HashMap<>();
 
-    private String dataEmissao = "30/10/2020";
-    private String dataVencimento = "30/10/2020";
-    private String dataCompetenciaContabil = "30/10/2020";
+    private String ultimoDiaMes = "";
+    private String penultimoDiaMes = "";
+    private String dia20ProximoMes = "";
+    private String penultimoDiaProximoMes = "";
 
     public Entry_Model(Map<String, String> payrollValues, List<Map<String, String>> salaries) {
         this.payrollValues = payrollValues;
         this.salaries = salaries;
+
+        //Descrição de mes e ano
+        this.payrollValues.put("Mês e Ano", Dates.getMonthAbbr_PtBr(Integer.valueOf(payrollValues.get("Mês"))).toUpperCase() + " " + payrollValues.get("Ano"));
 
         //Adiciona os valores das colunas padrões
         addDefaultCol("Cod Fundacao");
@@ -31,7 +37,7 @@ public class Entry_Model {
         addDefaultCol("DV Agencia");
         addDefaultCol("Conta Corrente");
         addDefaultCol("DV Conta Corrente");
-        addDefaultCol("Cod Natureza");
+        //addDefaultCol("Cod Natureza");
         addDefaultCol("Cod Empresa");
         addDefaultCol("Cod Plano");
         addDefaultCol("Cod Perfil");
@@ -63,52 +69,92 @@ public class Entry_Model {
         return ConvertPaymentRollToIntechTemplate.ini.get("ConvertPaymentRollToIntechTemplate", name);
     }
 
+    /**
+     * Cria Datas
+     */
+    public void createDates() {
+        Integer month = Integer.valueOf(payrollValues.get("Mês"));
+        Integer year = Integer.valueOf(payrollValues.get("Ano"));
+
+        Calendar firstDay = Dates.getCalendarFromFormat("01/" + month + "/" + year, "dd/MM/YYYY");
+        ultimoDiaMes = firstDay.getActualMaximum(Calendar.DAY_OF_MONTH) + "/" + month + "/" + year;
+        
+        Calendar penultimoDiaCalendar = Dates.getCalendarFromFormat(ultimoDiaMes, "dd/MM/YYYY");
+        penultimoDiaCalendar.add(Calendar.DAY_OF_MONTH, -1);
+        penultimoDiaMes = Dates.getCalendarInThisStringFormat(penultimoDiaCalendar, "dd/MM/YYYY");
+        
+        Calendar dia20ProximoMesCalendar = Dates.getCalendarFromFormat(ultimoDiaMes, "dd/MM/YYYY");
+        dia20ProximoMesCalendar.set(Calendar.DAY_OF_MONTH, 20);
+        dia20ProximoMesCalendar.add(Calendar.MONTH, 1);
+        dia20ProximoMes = Dates.getCalendarInThisStringFormat(dia20ProximoMesCalendar, "dd/MM/YYYY");
+        
+        Calendar penultimoDiaProximoMesCalendar = Calendar.getInstance();
+        penultimoDiaProximoMesCalendar.set(Calendar.DAY_OF_MONTH, dia20ProximoMesCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        penultimoDiaProximoMesCalendar.set(Calendar.YEAR, dia20ProximoMesCalendar.get(Calendar.YEAR));
+        penultimoDiaProximoMesCalendar.set(Calendar.MONTH, dia20ProximoMesCalendar.get(Calendar.MONTH));
+        penultimoDiaProximoMesCalendar.add(Calendar.DAY_OF_MONTH, -1);
+        
+        penultimoDiaProximoMes = Dates.getCalendarInThisStringFormat(penultimoDiaProximoMesCalendar, "dd/MM/YYYY");
+    }
+
+    /**
+     * Adiciona lançamentos de salario no mapa de lançamentos
+     */
     public void addSalariesToEntries() {
         //Percorre todos salarios
         for (Map<String, String> salary : salaries) {
             Map<String, String> cols = new HashMap<>();
             cols.put("Descricao", "FOLHA SALARIAL");
             cols.put("Obs Geral", salary.get("Nome").toUpperCase());
-            cols.put("Data Emissao", dataEmissao);
-            cols.put("Data Vencimento", dataVencimento);
-            cols.put("Data Competencia Contabil", dataCompetenciaContabil);
+            cols.put("Data Emissao", penultimoDiaMes);
+            cols.put("Data Vencimento", penultimoDiaProximoMes);
+            cols.put("Data Competencia Contabil", ultimoDiaMes);
             //cols.put("CPFCNPJ", salary.get("CPF"));
-            cols.put("Hist Contabil", "Salário pago ao colaborador " + salary.get("Nome"));
+            cols.put("Hist Contabil", "PG SALARIO " + payrollValues.get("Mês e Ano"));
+            cols.put("Cod Natureza", "FF01");
             cols.put("Valor Bruto", salary.get("Salario"));
-            cols.put("Nosso Numero", salary.get("Salario"));
-            cols.put("Tipo Conta Bancaria", "SAL");
+            cols.put("Nosso Numero", "");
+            cols.put("Tipo Conta Bancaria", "COR");
 
             entries.add(cols);
         }
     }
 
+    /**
+     * Adiciona lançamento de FGTS no mapa de lançamentos
+     */
     public void addFGTSToEntry() {
         Map<String, String> cols = new HashMap<>();
         cols.put("Descricao", "FGTS");
-        cols.put("Obs Geral", "FGTS FL SAL ");
-        cols.put("Data Emissao", dataEmissao);
-        cols.put("Data Vencimento", dataVencimento);//Trocar para data do proximo mês e pá
-        cols.put("Data Competencia Contabil", dataCompetenciaContabil);
+        cols.put("Obs Geral", "FGTS FL SAL " + payrollValues.get("Mês e Ano"));
+        cols.put("Data Emissao", ultimoDiaMes);
+        cols.put("Data Vencimento", dia20ProximoMes);
+        cols.put("Data Competencia Contabil", ultimoDiaMes);
         //cols.put("CPFCNPJ", payrollValues.get("CNPJ"));
-        cols.put("Hist Contabil", "Pagamento FGTS mensal");
+        cols.put("Hist Contabil", "PG FGTS FOLHA SALARIAL" + payrollValues.get("Mês e Ano"));
+        cols.put("Cod Natureza", "FF03");
         cols.put("Valor Bruto", payrollValues.get("FGTS"));
-        cols.put("Nosso Numero", payrollValues.get("FGTS"));
+        cols.put("Nosso Numero", "");
         cols.put("Tipo Conta Bancaria", "COR");
 
         entries.add(cols);
     }
 
+    /**
+     * Adiciona lançamento de INSS no mapa de lançamentos
+     */
     public void addINSSToEntry() {
         Map<String, String> cols = new HashMap<>();
         cols.put("Descricao", "INSS");
-        cols.put("Obs Geral", "INSS");
-        cols.put("Data Emissao", dataEmissao);
-        cols.put("Data Vencimento", dataVencimento);//Trocar para data do proximo mês e pá
-        cols.put("Data Competencia Contabil", dataCompetenciaContabil);
+        cols.put("Obs Geral", "INSS FL SAL " + payrollValues.get("Mês e Ano"));
+        cols.put("Data Emissao", ultimoDiaMes);
+        cols.put("Data Vencimento", dia20ProximoMes);
+        cols.put("Data Competencia Contabil", ultimoDiaMes);
         //cols.put("CPFCNPJ", payrollValues.get("CNPJ"));
-        cols.put("Hist Contabil", "Pagamento FGTS mensal");
+        cols.put("Hist Contabil", "PG GPS INSS FOLHA SALARIAL" + payrollValues.get("Mês e Ano"));
+        cols.put("Cod Natureza", "FF02");
         cols.put("Valor Bruto", payrollValues.get("INSS"));
-        cols.put("Nosso Numero", payrollValues.get("INSS"));
+        cols.put("Nosso Numero", "");
         cols.put("Tipo Conta Bancaria", "COR");
 
         entries.add(cols);
@@ -123,9 +169,9 @@ public class Entry_Model {
      */
     public String getImportText() {
         StringBuilder text = new StringBuilder();
-        
+
         //Percorre lançamentos
-        for (Map<String, String> entry : entries) {           
+        for (Map<String, String> entry : entries) {
             text.append(defaultCols.get("Cod Fundacao")).append(";");
             text.append(defaultCols.get("Tipo da Previsao")).append(";");
             text.append(entry.get("Descricao")).append(";");
@@ -141,7 +187,7 @@ public class Entry_Model {
             text.append(defaultCols.get("Conta Corrente")).append(";");
             text.append(defaultCols.get("DV Conta Corrente")).append(";");
             text.append(entry.get("Hist Contabil")).append(";");
-            text.append(defaultCols.get("Cod Natureza")).append(";");
+            text.append(entry.get("Cod Natureza")).append(";");
             text.append(defaultCols.get("Cod Empresa")).append(";");
             text.append(defaultCols.get("Cod Plano")).append(";");
             text.append(defaultCols.get("Cod Perfil")).append(";");
@@ -153,7 +199,7 @@ public class Entry_Model {
             text.append(entry.get("Tipo Conta Bancaria")).append(";");
             text.append("\r\n");
         }
-        
+
         return text.toString();
     }
 }
