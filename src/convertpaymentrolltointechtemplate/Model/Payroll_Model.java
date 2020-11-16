@@ -54,6 +54,8 @@ public class Payroll_Model {
             
             //Pega os meses em lista e pega o index onde está aquele mes pra descobrir o mes
             month = Args.indexOf((String[]) Dates.getBrazilianMonths().toArray(), Args.INDEX_OF_SEARCH_TYPE_EQUALS, monthName) + 1;
+            values.put("Mês", month.toString());
+            values.put("Ano", year.toString());
             
             Map<String,String> lastSalary = new HashMap<>();
             

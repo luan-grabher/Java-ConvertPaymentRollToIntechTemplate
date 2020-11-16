@@ -24,8 +24,8 @@ public class Entry_Model {
         //Adiciona os valores das colunas padrões
         addDefaultCol("Cod Fundacao");
         addDefaultCol("Tipo da Previsao");
-        addDefaultCol("Obs Geral");
         addDefaultCol("Cod Ccusto Emissor");
+        addDefaultCol("CPFCNPJ");
         addDefaultCol("Cod Banco");
         addDefaultCol("Cod Agencia");
         addDefaultCol("DV Agencia");
@@ -67,8 +67,8 @@ public class Entry_Model {
         //Percorre todos salarios
         for (Map<String, String> salary : salaries) {
             Map<String, String> cols = new HashMap<>();
-            cols.put("Descricao", "Salário pago ao colaborador " + salary.get("Nome"));
-            cols.put("Obs Geral", "Salário");
+            cols.put("Descricao", "FOLHA SALARIAL");
+            cols.put("Obs Geral", salary.get("Nome").toUpperCase());
             cols.put("Data Emissao", dataEmissao);
             cols.put("Data Vencimento", dataVencimento);
             cols.put("Data Competencia Contabil", dataCompetenciaContabil);
@@ -85,7 +85,7 @@ public class Entry_Model {
     public void addFGTSToEntry() {
         Map<String, String> cols = new HashMap<>();
         cols.put("Descricao", "FGTS");
-        cols.put("Obs Geral", "FGTS");
+        cols.put("Obs Geral", "FGTS FL SAL ");
         cols.put("Data Emissao", dataEmissao);
         cols.put("Data Vencimento", dataVencimento);//Trocar para data do proximo mês e pá
         cols.put("Data Competencia Contabil", dataCompetenciaContabil);

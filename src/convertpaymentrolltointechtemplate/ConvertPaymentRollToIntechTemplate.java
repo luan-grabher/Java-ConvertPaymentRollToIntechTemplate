@@ -30,7 +30,7 @@ public class ConvertPaymentRollToIntechTemplate {
             Database.setStaticObject(new Database(databaseConfigPath));
             
             //Testa conexao database
-            if(Database.getDatabase().testConnection()){                                    
+            if(/*Database.getDatabase().testConnection()*/ true){                                    
                 //Pega folha de pagamento
                 File payrollFile = Selector.selectFile("", "CSV(Texto separado por virgulas)", ".csv");
                 //Se o arquivo for valido
