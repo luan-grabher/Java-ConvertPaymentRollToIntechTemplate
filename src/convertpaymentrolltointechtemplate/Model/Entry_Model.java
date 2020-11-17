@@ -197,7 +197,7 @@ public class Entry_Model {
             text.append(defaultCols.get("Cod Perfil")).append(";");
             text.append(defaultCols.get("Cod Fundo")).append(";");
             text.append(defaultCols.get("Cod Custeio")).append(";");
-            text.append(defaultCols.get("Cod Custo")).append(";");
+            text.append(defaultCols.get("Cod Ccusto")).append(";");
             text.append(entry.get("Valor Bruto")).append(";");
             text.append(entry.get("Nosso Numero")).append(";");
             text.append(entry.get("Tipo Conta Bancaria")).append(";");
