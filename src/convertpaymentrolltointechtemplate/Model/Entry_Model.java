@@ -77,25 +77,21 @@ public class Entry_Model {
         Integer month = Integer.valueOf(payrollValues.get("Mês"));
         Integer year = Integer.valueOf(payrollValues.get("Ano"));
 
-        Calendar firstDay = Dates.getCalendarFromFormat("01/" + month + "/" + year, "dd/MM/YYYY");
+        Calendar firstDay = Dates.getCalendarFromFormat("01/" + month + "/" + year, "dd/MM/yy");
         ultimoDiaMes = firstDay.getActualMaximum(Calendar.DAY_OF_MONTH) + "/" + month + "/" + year;
         
-        Calendar penultimoDiaCalendar = Dates.getCalendarFromFormat(ultimoDiaMes, "dd/MM/YYYY");
+        Calendar penultimoDiaCalendar = Dates.getCalendarFromFormat(ultimoDiaMes, "dd/MM/yy");
         penultimoDiaCalendar.add(Calendar.DAY_OF_MONTH, -1);
-        penultimoDiaMes = Dates.getCalendarInThisStringFormat(penultimoDiaCalendar, "dd/MM/YYYY");
+        penultimoDiaMes = Dates.getCalendarInThisStringFormat(penultimoDiaCalendar, "dd/MM/yyyy");
         
-        Calendar dia20ProximoMesCalendar = Dates.getCalendarFromFormat(ultimoDiaMes, "dd/MM/YYYY");
+        Calendar dia20ProximoMesCalendar = Dates.getCalendarFromFormat(ultimoDiaMes, "dd/MM/yy");
         dia20ProximoMesCalendar.set(Calendar.DAY_OF_MONTH, 20);
         dia20ProximoMesCalendar.add(Calendar.MONTH, 1);
-        dia20ProximoMes = Dates.getCalendarInThisStringFormat(dia20ProximoMesCalendar, "dd/MM/YYYY");
+        dia20ProximoMes = Dates.getCalendarInThisStringFormat(dia20ProximoMesCalendar, "dd/MM/yyyy");
         
-        Calendar penultimoDiaProximoMesCalendar = Calendar.getInstance();
-        penultimoDiaProximoMesCalendar.set(Calendar.DAY_OF_MONTH, dia20ProximoMesCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-        penultimoDiaProximoMesCalendar.set(Calendar.YEAR, dia20ProximoMesCalendar.get(Calendar.YEAR));
-        penultimoDiaProximoMesCalendar.set(Calendar.MONTH, dia20ProximoMesCalendar.get(Calendar.MONTH));
-        penultimoDiaProximoMesCalendar.add(Calendar.DAY_OF_MONTH, -1);
-        
-        penultimoDiaProximoMes = Dates.getCalendarInThisStringFormat(penultimoDiaProximoMesCalendar, "dd/MM/YYYY");
+        Calendar penultimoDiaProximoMesCalendar = Dates.getCalendarFromFormat(dia20ProximoMes, "dd/MM/yy");
+        penultimoDiaProximoMesCalendar.set(Calendar.DAY_OF_MONTH, dia20ProximoMesCalendar.getActualMaximum(Calendar.DAY_OF_MONTH) -1);        
+        penultimoDiaProximoMes = Dates.getCalendarInThisStringFormat(penultimoDiaProximoMesCalendar, "dd/MM/yyyy");
     }
 
     /**
