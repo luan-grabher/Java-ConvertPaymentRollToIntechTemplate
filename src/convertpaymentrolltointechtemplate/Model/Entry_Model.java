@@ -196,7 +196,7 @@ public class Entry_Model {
             text.append(defaultCols.get("Cod Ccusto")).append(";");
             text.append(entry.get("Valor Bruto")).append(";");
             text.append(entry.get("Nosso Numero")).append(";");
-            text.append(entry.get("Tipo Conta Bancaria")).append(";");
+            text.append(entry.get("Tipo Conta Bancaria"));
             text.append("\r\n");
         }
 
