@@ -18,7 +18,7 @@ public class ConvertPaymentRollToIntechTemplate {
         //Define ini
         try {
             String inipath = args != null ? Args.get(args, "ini_path") : "config.ini";
-            ini = new Ini(new File(inipath == null ? "config.ini" : inipath));
+            ini = new Ini(new File(inipath == null ? "intech.ini" : inipath));
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Não foi possivel encontrar o arquivo de configuração!");
             System.exit(0);
