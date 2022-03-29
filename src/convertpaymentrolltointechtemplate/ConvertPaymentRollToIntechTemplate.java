@@ -26,7 +26,7 @@ public class ConvertPaymentRollToIntechTemplate {
 
         try {
             //Conecta com banco de dados
-            String databaseConfigPath = ini.get("Database", "configPath");
+            //String databaseConfigPath = ini.get("Database", "configPath");
             //Database.setStaticObject(new Database(databaseConfigPath));
             
             //Testa conexao database

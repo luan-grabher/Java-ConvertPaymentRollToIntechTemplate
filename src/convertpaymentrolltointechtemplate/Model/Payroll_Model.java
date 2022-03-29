@@ -43,7 +43,7 @@ public class Payroll_Model {
         String[] lines = text.split("\r\n");
         
         //Extrai data
-        Pattern p = Pattern.compile("[A-Z]+\\/[0-9]+");
+        Pattern p = Pattern.compile("[A-ZÇ]+\\/[0-9]+");
         String firstCol = lines[0].split(";")[0];
         Matcher m = p.matcher(firstCol);
         if(m.find()){
